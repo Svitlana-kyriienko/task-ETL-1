@@ -193,3 +193,39 @@ print(random_5)
 
 ####6 Групування та статистика
 
+print("\n------Групування та статистика------")
+
+#ТОП-5 унікальних доменів:
+
+print(df["email"].str.split("@").str[-1].value_counts().head(5))
+
+#ТОП-5 міст:
+
+print(df["city"].value_counts().head(5)) #маємо топ 3
+
+#Кількість людей у кодному місті:
+
+print(df["city"].value_counts()) #оскільки 
+
+# agg_by_city = df.groupby("city").agg(
+#     people_count = ("city", "size"),
+#     avg_people = ("first_name", "mean")
+# )#.sort_values(people_count).head(10)
+
+# print(agg_by_city)
+df["domain"] = df["email"].str.split("@").str[-1]
+
+agg_by_city = df.groupby("city").agg(
+    people_count=("first_name", "count"),
+    uniq_dom=("domain", "nunique")
+).sort_values("people_count", ascending=False).head(10)
+
+print(agg_by_city)
+
+count_by_city = df.groupby('city').size().reset_index(name='count').sort_values("count", ascending=False).head(10)
+
+print(count_by_city)
+
+#Кількість унікальних доменів:
+
+# print(df["email"].str.split("@").str[-1].nunique())
